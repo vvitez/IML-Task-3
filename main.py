@@ -34,6 +34,7 @@ amino_category = {#already ordered by chemical closeness and chain length/van-de
     'W' : 4,#Tryptophan
     'Y' : 4 #Tyrosine
 }
+
 amino_order = {#this time i start at 1 for nn reasons
     'K' : 1,#Lysine
     'D' : 1,#Aspartic Acid
@@ -50,3 +51,17 @@ amino_order = {#this time i start at 1 for nn reasons
     'W' : 7,#Tryptophan
     'Y' : 8 #Tyrosine
 }
+
+data = pd.read_csv(filepath_or_buffer="train.csv", nrows = 10)
+data["Sequence"].apply(lambda x: pd.Series(list(x)))
+data["amino_ord_0"] = np.nan
+data["amino_ord_1"] = np.nan
+data["amino_ord_2"] = np.nan
+data["amino_ord_3"] = np.nan
+
+#for pos,seq in enumerate(data[Sequence]):
+#    data["amino_cat_0"][pos] = seq[0]
+data[0] = ""
+data[0][0] = "hello"
+print(data["Sequence"][0])
+print(data.head(5))
