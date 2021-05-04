@@ -46,7 +46,14 @@ amino_order = {#this time i start at 1 for nn reasons
     'G' : 1,#Glycine
     'A' : 1,#Alanine
     'R' : 2,#Arginine
-    'E' : 2,#GluIsoleucine
+    'E' : 2,#Glutamic Acid
+    'S' : 2,#Serine
+    'C' : 2,#Cysteine
+    'V' : 2,#Valine
+    'H' : 3,#Histidine
+    'N' : 3,#Asparagine
+    'U' : 3,#Selenocysteine
+    'I' : 3,#Isoleucine
     'Q' : 4,#Glutamine
     'P' : 4,#Proline
     'L' : 4,#Leucine
@@ -91,20 +98,30 @@ def split_data(data: pd.DataFrame, a_cols: list[str], b_cols: list[str]) -> (pd.
 	labels: pd.DataFrame = data.drop(a_cols, axis=1) # drop the columns named in b_cols, aka the labels
 	return features, labels
 
-"""
+
 logger.info_begin("Reading data...")
 read_timer = Timer()
 data = read_data("train.csv")
-features, labels = split_data(data, a_cols=['Sequence'], b_cols=['Active'])
+#data = pd.read_csv(filepath_or_buffer="train.csv",nrows= 5000)
+pSequence, pActive = split_data(data, a_cols=['Sequence'], b_cols=['Active'])
+
 test_features = read_data("test.csv")
 logger.info_end("Done in " + str(read_timer))
-"""
-data = pd.read_csv(filepath_or_buffer="train.csv", nrows = 10)
+
+ndSequence = pSequence.values.T[0]
+ndActive = pActive.values.T[0]
 
 
-#for pos,seq in enumerate(data[Sequence]):
-#    data["amino_cat_0"][pos] = seq[0]
-data[0] = ""
-data[0][0] = "hello"
-print(data["Sequence"][0])
-print(data.head(5))
+logger.info_begin("Preprocessing...")
+proc_timer = Timer()
+
+
+features = np.zeros(shape = (len(ndActive), 24), dtype= np.int64,)#0-0, .., 0-4, ..., 3-4, 0_ord, ..., 3_ord
+
+for pos, seq in enumerate(ndSequence):
+    logger.info_update("%d" %pos)
+    for i in range(4):
+        features[pos,i*5 + amino_category[seq[i]]] = 1
+        features[pos, 20 + i] = amino_order[seq[i]]
+print()
+print(features[1:50])
