@@ -5,6 +5,9 @@ import numpy as np
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import f1_score
+#f1_score(y_true, y_predicted)
 
 from util import Logger, Timer
 
@@ -118,16 +121,26 @@ logger.info_begin("Preprocessing...")
 proc_timer = Timer()
 
 
-features = np.zeros(shape = (len(ndActive), 24), dtype= np.int64,)#0-0, .., 0-4, ..., 3-4, 0_ord, ..., 3_ord
+features = np.zeros(shape = (len(ndActive), 25), dtype= np.int64,)#0-0, .., 0-4, ..., 3-4, 0_ord, ..., 3_ord, bias
 
 for pos, seq in enumerate(ndSequence):
     if pos % 1000 == 0: logger.info_update("%d" %pos)
     for i in range(4):
         features[pos,i*5 + amino_category[seq[i]]] = 1
         features[pos, 20 + i] = amino_order[seq[i]]
+    features[pos, 24] = 1 #bias
 logger.info_end("Done in " + str(proc_timer))
 
 x_train, x_test, y_train, y_test = train_test_split(features, ndActive, test_size = 0.1, random_state = 42, shuffle = True)
 
+#logger.info_begin("Training Classifier...")
+train_timer = Timer()
+classifier = MLPClassifier(hidden_layer_sizes = (100), activation = "relu", solver = "adam", alpha = 0.0001, batch_size = 200, learning_rate = "constant", learning_rate_init = 0.001, max_iter = 1000, shuffle = False, tol = 1e-4, verbose = True, warm_start = False, beta_1 = 0.9, beta_2 = 0.999, epsilon = 1e-8, n_iter_no_change = 100)
+# ah yes big chungus.
+classifier.fit(x_train, y_train)
+#logger.info_end("Done in " + str(train_timer))
 
-#print(features[1:50])
+y_pred = classifier.predict(x_test)
+
+score = f1_score(y_test, y_pred)
+print("Test F1 score: %f" %score)
