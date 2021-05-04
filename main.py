@@ -100,11 +100,7 @@ test_features = read_data("test.csv")
 logger.info_end("Done in " + str(read_timer))
 """
 data = pd.read_csv(filepath_or_buffer="train.csv", nrows = 10)
-data["Sequence"].apply(lambda x: pd.Series(list(x)))
-data["amino_ord_0"] = np.nan
-data["amino_ord_1"] = np.nan
-data["amino_ord_2"] = np.nan
-data["amino_ord_3"] = np.nan
+
 
 #for pos,seq in enumerate(data[Sequence]):
 #    data["amino_cat_0"][pos] = seq[0]
