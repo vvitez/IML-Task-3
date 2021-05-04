@@ -56,19 +56,7 @@ amino_order = {#this time i start at 1 for nn reasons
     'Y' : 8 #Tyrosine
 }
 
-data = pd.read_csv(filepath_or_buffer="train.csv", nrows = 10)
-data["Sequence"].apply(lambda x: pd.Series(list(x)))
-data["amino_ord_0"] = np.nan
-data["amino_ord_1"] = np.nan
-data["amino_ord_2"] = np.nan
-data["amino_ord_3"] = np.nan
 
-#for pos,seq in enumerate(data[Sequence]):
-#    data["amino_cat_0"][pos] = seq[0]
-data[0] = ""
-data[0][0] = "hello"
-print(data["Sequence"][0])
-print(data.head(5))
 def read_data(filename) -> pd.DataFrame:
 	"""
 		Read the data of a csv file into a pandas DataFrame
@@ -103,10 +91,24 @@ def split_data(data: pd.DataFrame, a_cols: list[str], b_cols: list[str]) -> (pd.
 	labels: pd.DataFrame = data.drop(a_cols, axis=1) # drop the columns named in b_cols, aka the labels
 	return features, labels
 
-
+"""
 logger.info_begin("Reading data...")
 read_timer = Timer()
 data = read_data("train.csv")
 features, labels = split_data(data, a_cols=['Sequence'], b_cols=['Active'])
 test_features = read_data("test.csv")
 logger.info_end("Done in " + str(read_timer))
+"""
+data = pd.read_csv(filepath_or_buffer="train.csv", nrows = 10)
+data["Sequence"].apply(lambda x: pd.Series(list(x)))
+data["amino_ord_0"] = np.nan
+data["amino_ord_1"] = np.nan
+data["amino_ord_2"] = np.nan
+data["amino_ord_3"] = np.nan
+
+#for pos,seq in enumerate(data[Sequence]):
+#    data["amino_cat_0"][pos] = seq[0]
+data[0] = ""
+data[0][0] = "hello"
+print(data["Sequence"][0])
+print(data.head(5))
