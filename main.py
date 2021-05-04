@@ -2,9 +2,13 @@
 Ok here we go. Let's acquire the bread of this task.
 """
 import numpy as np 
-import pandas as pd 
+import pandas as pd
+
+from util import Logger, Timer
 
 
+logger: Logger = Logger()
+script_timer = Timer()
 
 amino_category = {#already ordered by chemical closeness and chain length/van-der-waals/hydrogen bonds
 #positively charged:
@@ -50,3 +54,45 @@ amino_order = {#this time i start at 1 for nn reasons
     'W' : 7,#Tryptophan
     'Y' : 8 #Tyrosine
 }
+
+def read_data(filename) -> pd.DataFrame:
+	"""
+		Read the data of a csv file into a pandas DataFrame
+		
+		Parameters:
+			filename: The filename to read from
+		
+		Returns:
+			Pandas DataFrame containing the data from the csv file
+		
+		Authors:
+			linvogel
+	"""
+	return pd.read_csv(filename)
+
+def split_data(data: pd.DataFrame, a_cols: list[str], b_cols: list[str]) -> (pd.DataFrame, pd.DataFrame):
+	"""
+		Splits the given pandas DataFrame into two collections of columns. This can be used to split features and labels provided in a single csv file.csv
+		
+		Parameters:
+			data: The pandas DataFrame containing the data
+			a_cols: List of column names that should be in the left side of the split
+			b_cols: List of column names that should be in the right side of the split
+		
+		Returns:
+			A tuple of two pandas DataFrames containing the left and right side of the split
+		
+		Authors:
+			linvogel
+	"""
+	features: pd.DataFrame = data.drop(b_cols, axis=1) # drop the columns named in b_cols, aka the features
+	labels: pd.DataFrame = data.drop(a_cols, axis=1) # drop the columns named in b_cols, aka the labels
+	return features, labels
+
+
+logger.info_begin("Reading data...")
+read_timer = Timer()
+data = read_data("train.csv")
+features, labels = split_data(data, a_cols=['Sequence'], b_cols=['Active'])
+test_features = read_data("test.csv")
+logger.info_end("Done in " + str(read_timer))
