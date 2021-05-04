@@ -123,5 +123,6 @@ for pos, seq in enumerate(ndSequence):
     for i in range(4):
         features[pos,i*5 + amino_category[seq[i]]] = 1
         features[pos, 20 + i] = amino_order[seq[i]]
-print()
-print(features[1:50])
+logger.info_end("Done in " + str(proc_timer))
+
+#print(features[1:50])
