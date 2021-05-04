@@ -135,7 +135,7 @@ x_train, x_test, y_train, y_test = train_test_split(features, ndActive, test_siz
 
 #logger.info_begin("Training Classifier...")
 train_timer = Timer()
-classifier = MLPClassifier(hidden_layer_sizes = (100), activation = "relu", solver = "adam", alpha = 0.0001, batch_size = 200, learning_rate = "constant", learning_rate_init = 0.001, max_iter = 1000, shuffle = False, tol = 1e-4, verbose = True, warm_start = False, beta_1 = 0.9, beta_2 = 0.999, epsilon = 1e-8, n_iter_no_change = 100)
+classifier = MLPClassifier(hidden_layer_sizes = (100), activation = "relu", solver = "adam", alpha = 0.0001, batch_size = 200, learning_rate = "constant", learning_rate_init = 0.001, max_iter = 1000, shuffle = False, tol = 1e-4, verbose = True, warm_start = False, beta_1 = 0.9, beta_2 = 0.999, epsilon = 1e-8, n_iter_no_change = 10000)
 # ah yes big chungus.
 classifier.fit(x_train, y_train)
 #logger.info_end("Done in " + str(train_timer))
