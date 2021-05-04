@@ -119,10 +119,10 @@ proc_timer = Timer()
 features = np.zeros(shape = (len(ndActive), 24), dtype= np.int64,)#0-0, .., 0-4, ..., 3-4, 0_ord, ..., 3_ord
 
 for pos, seq in enumerate(ndSequence):
-    logger.info_update("%d" %pos)
+    if pos % 1000 == 0: logger.info_update("%d" %pos)
     for i in range(4):
         features[pos,i*5 + amino_category[seq[i]]] = 1
         features[pos, 20 + i] = amino_order[seq[i]]
 logger.info_end("Done in " + str(proc_timer))
 
-#print(features[1:50])
+print(features[1:50])
