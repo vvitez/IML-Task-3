@@ -4,6 +4,8 @@ Ok here we go. Let's acquire the bread of this task.
 import numpy as np 
 import pandas as pd
 
+from sklearn.model_selection import train_test_split
+
 from util import Logger, Timer
 
 
@@ -105,7 +107,7 @@ data = read_data("train.csv")
 #data = pd.read_csv(filepath_or_buffer="train.csv",nrows= 5000)
 pSequence, pActive = split_data(data, a_cols=['Sequence'], b_cols=['Active'])
 
-test_features = read_data("test.csv")
+#test_features = read_data("test.csv"), TODO: do that later
 logger.info_end("Done in " + str(read_timer))
 
 ndSequence = pSequence.values.T[0]
@@ -124,5 +126,8 @@ for pos, seq in enumerate(ndSequence):
         features[pos,i*5 + amino_category[seq[i]]] = 1
         features[pos, 20 + i] = amino_order[seq[i]]
 logger.info_end("Done in " + str(proc_timer))
+
+x_train, x_test, y_train, y_test = train_test_split(features, ndActive, test_size = 0.1, random_state = 42, shuffle = True)
+
 
 #print(features[1:50])
